@@ -1,8 +1,16 @@
 #!/bin/zsh
 
-kill -0 ${1:?} || exit 1
 
-while kill -0 ${1} 2>/dev/null
+if [[ -z "$1" ]]; then
+    pid=$(ps -e -o pid,command | grep -v '[y]wait$' | fzf --exact --header="Select a process by PID" | awk '{print $1}')
+else
+    pid=${1:?}
+fi
+
+kill -0 ${pid:?} || exit 1
+
+while kill -0 ${pid:?} 2>/dev/null
 do
     sleep 1
 done
+
