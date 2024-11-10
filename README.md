@@ -1,2 +1,3 @@
-# wait
-wait process
+# ywait
+
+wait other process finished
