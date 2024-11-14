@@ -5,12 +5,17 @@ function setup() {
 }
 
 function local_job() {
-    sleep 2
+    sleep 3
     : > res.txt
 }
 
 
 setup
 local_job &
+./ywait $! && test -f res.txt || { echo "failed: ywait could not wait process" >&2 ; }
 
-./ywait $! && test -f res.txt || { echo "failed" >&2 ; }
+setup
+local_job &
+if ./ywait -t 1 $!; then
+  test -f res.txt && { echo "failed: ywait timeout is not working" >&2 ; }
+fi
